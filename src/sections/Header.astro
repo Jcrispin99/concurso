@@ -37,7 +37,7 @@ const isActive = (path: string) => pathname === path
 >
   <div class="relative flex justify-between px-6 py-4 md:w-full">
     <a href="/" class="cursor-pointer transition duration-300 hover:scale-110 md:hidden">
-      <img src="/favicon.svg" alt="logo" class="h-auto w-7" />
+      <img src="/favicon.svg" alt="logo" class="h-auto w-15" />
     </a>
 
     <div
@@ -59,7 +59,7 @@ const isActive = (path: string) => pathname === path
               class="h-10"
               src="/favicon.svg"
               fetchpriority="high"
-              alt="La Velada del Año V"
+              alt="Miss Kdosh 2025"
               decoding="async"
             />
           </a>
@@ -68,17 +68,16 @@ const isActive = (path: string) => pathname === path
 
       <div>
         <a
-          href="https://www.youtube.com/watch?v=YE2Tmktpp50"
+          href="#"
           class:list={[
             'w-fut group relative flex-col items-end py-1 leading-relaxed tracking-wider md:text-right',
             shouldShowLogo ? 'md:w-1/3' : 'md:flex-grow',
           ]}
           rel="noopener noreferrer"
-          target="_blank"
-          title="Comprar entradas para La Velada V"
+          title="Votar por mi candidata favorita"
         >
           <span id="buy-tickets" class="text-theme-seashell neon-text relative inline-block"
-            >VER LA VELADA V
+            >EMPEZAR A VOTAR
           </span>
           <div class="relative h-[2px] w-full overflow-hidden">
             <div

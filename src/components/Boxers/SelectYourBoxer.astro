@@ -55,10 +55,10 @@ const reverseDelays = [700, 500]
 
     <!-- Mobile: Scroll horizontal -->
     <div class="flex md:hidden w-full max-w-[100vw] overflow-x-scroll">
-      <div class="fadeout-horizontal no-scrollbar flex snap-x snap-mandatory gap-8 overflow-x-scroll py-2 px-4">
+      <div class="fadeout-horizontal no-scrollbar flex snap-x snap-mandatory gap-8 overflow-x-scroll py-2 px-1">
         {
           boxers.map(({ id, name }, index) => (
-            <div class={`w-fit flex-shrink-0 snap-center ${index === 0 ? 'ml-[25%]' : ''}`}>
+            <div class="w-fit flex-shrink-0 snap-center">
               <BoxerCard id={id} name={name} versus="" class="" />
             </div>
           ))
