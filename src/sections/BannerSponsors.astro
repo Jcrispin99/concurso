@@ -1,0 +1,20 @@
+---
+import { BANNERS } from '@/consts/bannerData'
+import SectionTitle from '@/components/SectionTitle.astro'
+import { Image } from 'astro:assets'
+---
+
+<script>
+  import { track } from '@vercel/analytics'
+  import { $$ } from '@/lib/dom-selector'
+
+  const banners = $$('#banners a')
+
+  banners.forEach((banner) => {
+    banner.addEventListener('click', () => {
+      track('Product', {
+        product: banner.getAttribute('data-id'),
+      })
+    })
+  })
+</script>

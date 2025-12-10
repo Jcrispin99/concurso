@@ -1,0 +1,81 @@
+---
+import BoxerCard from '@/components/BoxerCard.astro'
+import BoxerBigImages from '@/components/Boxers/BoxerBigImages.astro'
+import type { Fighters } from '@/types/fighters'
+
+interface Props {
+  boxers: Fighters[]
+  selectedBoxer: Fighters
+}
+
+const { boxers } = Astro.props
+
+// Dividir en 2 a la izquierda y 2 a la derecha del logo central
+const leftBoxers = boxers.slice(0, 2)
+const rightBoxers = boxers.slice(2, 4)
+
+const animationDelays = [500, 700]
+const reverseDelays = [700, 500]
+---
+
+<>
+  <BoxerBigImages boxers={boxers} />
+
+  <div
+    id="fighters-selection-container"
+    class="relative flex h-full w-full max-w-6xl flex-col items-center justify-end gap-8 p-4"
+  >
+    <!-- Desktop: [P1] [P2] [espacio central] [P3] [P4] en una fila -->
+    <div class="hidden md:flex w-full justify-center items-end gap-4">
+      <!-- 2 participantes a la izquierda -->
+      <div class="flex gap-4">
+        {
+          leftBoxers.map(({ id, name }, index) => (
+            <div class={`animate-fade-in-right animate-duration-slower animate-delay-${animationDelays[index]}`}>
+              <BoxerCard id={id} name={name} versus="" class="boxer-left" />
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Espacio central para el logo (vacío, el logo está arriba en el Hero) -->
+      <div class="w-32 lg:w-48"></div>
+
+      <!-- 2 participantes a la derecha -->
+      <div class="flex gap-4">
+        {
+          rightBoxers.map(({ id, name }, index) => (
+            <div class={`animate-fade-in-left animate-duration-slower animate-delay-${reverseDelays[index]}`}>
+              <BoxerCard id={id} name={name} versus="" class="boxer-right" />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Mobile: Scroll horizontal -->
+    <div class="flex md:hidden w-full max-w-[100vw] overflow-x-scroll">
+      <div class="fadeout-horizontal no-scrollbar flex snap-x snap-mandatory gap-8 overflow-x-scroll py-2 px-4">
+        {
+          boxers.map(({ id, name }, index) => (
+            <div class={`w-fit flex-shrink-0 snap-center ${index === 0 ? 'ml-[25%]' : ''}`}>
+              <BoxerCard id={id} name={name} versus="" class="" />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</>
+
+<style>
+  .fadeout-horizontal {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 4.5rem,
+      black calc(100% - 4.5rem),
+      transparent
+    );
+  }
+</style>
