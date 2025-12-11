@@ -1,0 +1,75 @@
+---
+const { videoId, backgroundImage, title } = Astro.props
+---
+
+<style>
+.lyt-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    background-color: #000;
+    overflow: hidden;
+}
+.lyt-poster {
+    position: absolute;
+    inset: 0;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lyt-button {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, rgba(255, 79, 159, 1) 0%, rgba(0, 171, 165, 1) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    border: none;
+}
+.lyt-button svg {
+    transform: translateX(3px);
+}
+.lyt-iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+</style>
+
+<div class="lyt-wrapper" data-video-id={videoId}>
+    <div class="lyt-poster" style={`background-image: url('${backgroundImage}')`}>
+        <button
+        class="lyt-button"
+        aria-label={`Play ${title}`}
+        onclick="(function(btn){
+        const wrapper = btn.closest('[data-video-id]');
+        const id = wrapper.getAttribute('data-video-id');
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('class','lyt-iframe');
+        iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        iframe.setAttribute('allowfullscreen','');
+        iframe.setAttribute('loading','lazy');
+        iframe.src = `https://www.youtube.com/embed/${id}?rel=0&autoplay=1`;
+        wrapper.innerHTML = '';
+        wrapper.appendChild(iframe);
+        })(this)"
+        >
+        <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M8 5v14l11-7L8 5z" fill="#fff"></path>
+        </svg>
+        </button>
+    </div>
+</div>
