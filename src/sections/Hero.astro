@@ -17,10 +17,17 @@ const selectedBoxer = getBoxerById(selectedBoxerId) ?? FIGHTERS[0]
       >
         14 Y 15 DE <br />DICIEMBRE
       </h3>
-      <figure class="animate-fade-in relative">
+      <figure class="animate-fade-in relative flex flex-col items-center">
         <img
-          class="relative z-20 h-auto w-58 sm:w-82 md:w-90 lg:w-100"
-          src="/images/logo.webp"
+          class="relative z-20 mt-9 h-auto w-32 sm:w-48 md:w-36"
+          src="/images/corona.webp"
+          fetchpriority="high"
+          alt="Corona Miss Kdosh"
+          decoding="async"
+        />
+        <img
+          class="w-58 sm:w-82 md:w-90 lg:w-100 relative z-20 -mt-4 mb-9 h-auto sm:-mt-8"
+          src="/images/logo_kdosh.webp"
           fetchpriority="high"
           alt="Miss Kdosh 2025"
           decoding="async"
@@ -248,6 +255,9 @@ const selectedBoxer = getBoxerById(selectedBoxerId) ?? FIGHTERS[0]
     const $fightersContainer = document.getElementById(
       'fighters-selection-container',
     ) as HTMLElement
+
+    if (!$fightersContainer) return
+
     if (!isMobile) {
       $fightersContainer.appendChild($fighterSelector)
     } else {

@@ -1,20 +1,61 @@
 ---
 import SectionTitle from '@/components/SectionTitle.astro'
-import LiteYouTube from '@/components/LiteYouTube.astro'
-
-const PESAJE_VIDEO_ID = 'M25mIX7iSDg'
-const CARA_A_CARA_VIDEO_ID = 'Po71dTrb-CY'
-const CHARLA_VIDEO_ID = 'b736y_2jsfE'
-const PRESENTATION_VIDEO_ID = '8XWjkURqnlo'
 ---
 
-<section id="Pesaje concursantes" class="max-w-4xl px-5 py-36 md:mx-auto">
-  <SectionTitle class="pb-8" title="Pesaje concursantes" />
+<section id="preguntas-frecuentes" class="max-w-4xl px-5 py-36 md:mx-auto">
+  <SectionTitle class="pb-8" title="PREGUNTAS FRECUENTES" />
 
-  <LiteYouTube
-    videoId={PESAJE_VIDEO_ID}
-    title="Pesaje concursantes"
-    backgroundImage="/images/pesaje.webp"
-    withShadowImage={true}
-  />
+  <div class="flex w-full flex-col gap-4">
+    {
+      [
+        {
+          question: '¿Qué es Miss Kdosh 2025?',
+          answer:
+            'Miss Kdosh 2025 es un evento de belleza y talento que busca destacar a mujeres emprendedoras, talentosas y con proyección social. Es una competencia donde las participantes demuestran no solo su belleza, sino también sus habilidades, su historia personal y su compromiso con causas sociales. El evento celebra la diversidad, el empoderamiento femenino y los sueños de mujeres que inspiran a través de su autenticidad y determinación.',
+        },
+        {
+          question: '¿Dónde se realizará el evento?',
+          answer:
+            'El evento se realizará en los exteriores de la tienda Kdosh, ubicada en Jr. Abtao 1101, Huánuco. Es un evento presencial donde podrás disfrutar en vivo de todas las presentaciones, pasarelas y números artísticos de las candidatas.',
+        },
+        {
+          question: '¿Quiénes participarán en este evento?',
+          answer: `
+            En Miss Kdosh 2025 participarán cuatro talentosas candidatas:
+            <ul class="list-disc pl-4 mt-2 space-y-1 text-xs md:text-sm">
+              <li><strong>Miss Zuari:</strong> Claudia Rengifo (24 años, Abogada).</li>
+              <li><strong>Miss Evolution Jeans:</strong> Joisse Trinidad (24 años, Comunicadora).</li>
+              <li><strong>Miss Soda:</strong> Jackeline Avendaño (27 años, Gestor Comercial).</li>
+              <li><strong>Miss Pioner:</strong> Rosamady Acuña (25 años, Estudiante de Medicina).</li>
+            </ul>
+          `,
+        },
+      ].map((item) => (
+        <details class="group w-full overflow-hidden rounded-xl border border-white/10 bg-zinc-800/50 transition-all duration-300 open:bg-zinc-800/50 hover:border-[#00d7c9]">
+          <summary class="text-theme-turquoise hover:text-theme-turquoise/80 flex cursor-pointer select-none items-center justify-between p-4 font-bold uppercase transition-colors md:p-6">
+            <span class="text-sm md:text-base">{item.question}</span>
+            <span class="transition-transform duration-300 group-open:rotate-180">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </span>
+          </summary>
+          <div
+            class="animate-fade-in text-theme-seashell/80 px-4 pb-4 pt-0 text-sm leading-relaxed md:px-6 md:pb-6 md:text-base"
+            set:html={item.answer}
+          />
+        </details>
+      ))
+    }
+  </div>
 </section>
