@@ -1,38 +1,16 @@
 import type { Social } from '@/types/social'
 
 type fighterId =
+| 'miss_zuari'
   | 'miss_pioner'
   | 'miss_soda'
-  | 'perxitaa'
-  | 'abby'
-  | 'roro'
-  | 'gaspi'
-  | 'rivaldios'
-  | 'andoni'
-  | 'viruzz'
-  | 'alana'
-  | 'grefg'
-  | 'westcol'
-  | 'arigeli'
-  | 'tomas'
-  | 'carlos'
+  | 'miss_evolution_jeans'
 
 type fighterName =
+| 'Miss Zuari'
   | 'Miss Pioner'
   | 'Miss Soda'
-  | 'Perxitaa'
-  | 'Abby'
-  | 'Roro'
-  | 'Gaspi'
-  | 'Rivaldios'
-  | 'Andoni'
-  | 'Viruzz'
-  | 'Alana'
-  | 'Grefg'
-  | 'Westcol'
-  | 'Arigeli'
-  | 'Tomás'
-  | 'Carlos'
+  | 'Miss Evolution Jeans'
 
 interface Clips {
   text: string
