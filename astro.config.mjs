@@ -17,6 +17,9 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: ['miss.kdoshstore.com'],
+    },
   },
 
   build: {
