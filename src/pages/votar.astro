@@ -1,0 +1,194 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { FIGHTERS } from '@/consts/fighters'
+---
+
+<Layout title="Votar - Miss Kdosh 2025" description="Vota por tu participante favorita">
+  <main class="flex min-h-screen items-center justify-center px-4 py-24">
+    <section class="relative z-20 w-full max-w-4xl">
+      <h1 class="text-theme-seashell mb-8 text-center text-3xl font-bold">
+        Vota por tu participante favorita
+      </h1>
+
+      <div id="notice" class="text-theme-seashell/80 mb-6 text-center text-sm"></div>
+
+      <ul id="fighters" class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {
+          FIGHTERS.map((f) => (
+            <li
+              data-id={f.id}
+              class="bg-theme-raisin-black/50 relative rounded-2xl border border-white/5 p-4 shadow-lg backdrop-blur-sm"
+            >
+              <div class="flex items-center gap-4">
+                <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-800">
+                  <img
+                    src={`/images/fighters/cards/${f.id}.webp`}
+                    alt={f.name}
+                    class="h-full w-full object-cover"
+                    onerror="this.style.display='none'"
+                  />
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-theme-seashell text-lg font-semibold">{f.name}</h3>
+                  <p class="text-theme-seashell/70 text-sm">{f.city}</p>
+                </div>
+                <div class="flex flex-col items-end gap-2">
+                  <div class="text-theme-seashell/80 text-sm">Votos</div>
+                  <div class="text-theme-seashell text-xl font-bold" data-count>
+                    0
+                  </div>
+                  <button
+                    class="vote-btn from-theme-tickle-me-pink to-theme-turquoise mt-2 rounded-lg bg-gradient-to-r px-4 py-2 font-bold text-black transition hover:scale-105 active:scale-95"
+                    aria-pressed="false"
+                  >
+                    Votar
+                  </button>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div id="result" class="mt-8 text-center"></div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  // Client-side voting logic (plain JS to avoid TS-only errors in editor/build)
+  const LOCAL_VOTE_KEY = 'mk_votes_counts'
+  const LOCAL_USER_VOTE = 'mk_user_vote'
+  const LOCAL_USER_KEY = 'user' // same key used in auth.astro
+
+  function getUser() {
+    try {
+      return JSON.parse(localStorage.getItem(LOCAL_USER_KEY) || 'null')
+    } catch (e) {
+      return null
+    }
+  }
+
+  function getCounts() {
+    try {
+      return JSON.parse(localStorage.getItem(LOCAL_VOTE_KEY) || '{}')
+    } catch (e) {
+      return {}
+    }
+  }
+
+  function saveCounts(counts: Record<string, number>) {
+    localStorage.setItem(LOCAL_VOTE_KEY, JSON.stringify(counts))
+  }
+
+  function getUserVote() {
+    try {
+      return JSON.parse(localStorage.getItem(LOCAL_USER_VOTE) || 'null')
+    } catch (e) {
+      return null
+    }
+  }
+
+  function saveUserVote(vote: { email: string; fighterId: string; fighterName: string }) {
+    localStorage.setItem(LOCAL_USER_VOTE, JSON.stringify(vote))
+  }
+
+  function formatWarning(msg: string) {
+    const notice = document.getElementById('notice')
+    if (notice) notice.textContent = msg
+  }
+
+  function renderCounts() {
+    const counts = getCounts()
+    document.querySelectorAll('[data-id]').forEach((el) => {
+      const id = el.getAttribute('data-id')
+      if (!id) return
+      const countEl = el.querySelector('[data-count]')
+      if (countEl) countEl.textContent = String(counts[id] || 0)
+    })
+  }
+
+  function disableAllButtons() {
+    document.querySelectorAll('.vote-btn').forEach((btn) => {
+      // btn may be a generic Element in some editors — use setAttribute for compatibility
+      try {
+        btn.setAttribute('disabled', 'true')
+      } catch (e) {
+        // ignore
+      }
+      btn.classList.add('opacity-60', 'cursor-not-allowed')
+      btn.setAttribute('aria-pressed', 'true')
+    })
+  }
+
+  function init() {
+    const user = getUser()
+    if (!user || !user.email) {
+      // redirect to auth if not logged in
+      formatWarning('Debes iniciar sesión para votar. Redirigiendo a autenticación...')
+      setTimeout(() => {
+        window.location.href = '/auth'
+      }, 1200)
+      return
+    }
+
+    const userVote = getUserVote()
+    if (userVote && userVote.email === user.email) {
+      formatWarning(`Ya has votado por ${userVote.fighterName}. Gracias!`)
+      disableAllButtons()
+    } else {
+      formatWarning('Puedes votar UNA vez por UNA participante.')
+    }
+
+    renderCounts()
+
+    document.querySelectorAll('[data-id]').forEach((item) => {
+      const btn = item.querySelector('.vote-btn')
+      const id = item.getAttribute('data-id')
+      if (!id) return
+      const h3 = item.querySelector('h3')
+      const fighterName = (h3 && h3.textContent) || id
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const currentUser = getUser()
+          if (!currentUser || !currentUser.email) {
+            alert('Debes iniciar sesión para votar')
+            window.location.href = '/auth'
+            return
+          }
+
+          const already = getUserVote()
+          if (already && already.email === currentUser.email) {
+            alert('Ya votaste. Gracias!')
+            disableAllButtons()
+            return
+          }
+
+          // increment count
+          const counts = getCounts()
+          counts[id] = (counts[id] || 0) + 1
+          saveCounts(counts)
+
+          // save user vote
+          saveUserVote({
+            email: currentUser.email,
+            fighterId: id,
+            fighterName: String(fighterName),
+          })
+
+          // update UI
+          renderCounts()
+          formatWarning(`Voto registrado por ${fighterName}. ¡Gracias!`)
+          disableAllButtons()
+
+          // show summary
+          const result = document.getElementById('result')
+          if (result)
+            result.innerHTML = `<p class="text-theme-seashell/90">Tu voto por <strong>${fighterName}</strong> se contó correctamente.</p>`
+        })
+      }
+    })
+  }
+
+  document.addEventListener('astro:page-load', init)
+</script>

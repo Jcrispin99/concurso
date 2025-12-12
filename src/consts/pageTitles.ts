@@ -1,4 +1,4 @@
-export const fixedTitle: string = 'La Velada del Año V Web Oficial - Evento de boxeo de Ibai Llanos con creadores de contenido'
+export const fixedTitle: string = 'Miss Kdosh 2025 - Concurso de belleza - ¿Quién crees que será nuestra reina?'
 
 export const porra: string = `La Porra - ${fixedTitle}`
 

@@ -36,7 +36,6 @@ const {
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Preload de las fuentes para que no se vea el cambio de fuente al cargar la pagina -->
     <link
       rel="preload"
       href="/fonts/anisette-medium.woff2"
@@ -70,14 +69,6 @@ const {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://www.infolavelada.com/og.jpg" />
 
-    <script type="speculationrules">
-      {
-        "prerender": [{ "where": { "href_matches": "/*" }, "eagerness": "moderate" }],
-        "prefetch": [{ "where": { "href_matches": "/*" }, "eagerness": "moderate" }]
-      }
-    </script>
-
-    <!-- Datos estructurados para Evento (Schema.org) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

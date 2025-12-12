@@ -1,17 +1,17 @@
 import type { Social } from "@/types/social";
 
-import X from "@/assets/svg/x.svg";
+import Facebook from "@/assets/svg/facebook.svg";
 import Instagram from "@/assets/svg/instagram.svg";
-import GitHub from "@/assets/svg/github.svg";
+import TikTok from "@/assets/svg/tiktok.svg";
 
 export const SOCIAL: Social[] = [
   {
-    id: "x",
-    name: "X",
-    url: "https://x.com/infolavelada",
-    label: "Visitar perfil de InfoLaVelada en X",
+    id: "facebook",
+    name: "Facebook",
+    url: "https://www.facebook.com/kdoshstore",
+    label: "Visitar perfil de Kdosh Store en Facebook",
     image: {
-      logo: X,
+      logo: Facebook,
       width: 200,
       height: 200,
     },
@@ -20,8 +20,8 @@ export const SOCIAL: Social[] = [
   {
     id: "instagram",
     name: "Instagram",
-    url: "https://instagram.com/infoLaVelada",
-    label: "Visitar perfil de InfoLaVelada en Instagram",
+    url: "https://instagram.com/kdoshstore",
+    label: "Visitar perfil de Kdosh Store en Instagram",
     image: {
       logo: Instagram,
       width: 200,
@@ -30,12 +30,12 @@ export const SOCIAL: Social[] = [
   },
 
   {
-    id: "github",
-    name: "GitHub",
-    url: "https://github.com/midudev/la-velada-web-oficial",
-    label: "Visitar repositorio de la Velada Oficial en GitHub",
+    id: "tiktok",
+    name: "TikTok",
+    url: "https://www.tiktok.com/@kdoshstore",
+    label: "Visitar perfil de Kdosh Store en TikTok",
     image: {
-      logo: GitHub,
+      logo: TikTok,
       width: 200,
       height: 200,
     },
