@@ -8,7 +8,8 @@
     "prebuild": "pnpm generate:blur-images",
     "build": "astro build",
     "preview": "astro preview",
-    "start": "astro",
+    "start": "node ./dist/server/entry.mjs",
+    "start:prod": "HOST=0.0.0.0 PORT=4321 node ./dist/server/entry.mjs",
     "lint": "eslint --ext .astro .",
     "lint:fix": "eslint --ext .astro --fix .",
     "generate:blur-images": "node scripts/generate-blur-placeholders.mjs",
@@ -17,6 +18,7 @@
     "db:test": "node scripts/test-predictions.mjs"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.1",
     "@astrojs/sitemap": "3.5.0",
     "@astrojs/vercel": "8.2.6",
     "@auth/core": "0.40.0",

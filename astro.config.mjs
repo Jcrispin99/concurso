@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
-import vercel from '@astrojs/vercel'
+import node from '@astrojs/node'
 import sitemap from '@astrojs/sitemap'
 
 // Auth disabled - no Twitch credentials configured
@@ -10,32 +10,25 @@ import sitemap from '@astrojs/sitemap'
 export default defineConfig({
   output: 'server',
 
+  server: {
+    host: '0.0.0.0',
+    port: 4321,
+  },
+
   vite: {
     plugins: [tailwindcss()],
-    server: {
-      proxy: {
-        '/api': {
-          target: 'https://b-concurso.kdoshstore.com',
-          changeOrigin: true,
-          rewrite: (path) => {
-            if (path.includes('/vote') || path.includes('/results')) {
-              return path
-            }
-            return path.replace(/^\/api/, '')
-          },
-        },
-      },
-    },
   },
 
   build: {
     inlineStylesheets: 'always',
   },
 
-  adapter: vercel(),
+  adapter: node({
+    mode: 'standalone',
+  }),
 
   // Auth removed from integrations
   integrations: [sitemap()],
 
-  site: 'https://www.infolavelada.com/',
+  site: 'https://www.miss.kdoshstore.com/',
 })
