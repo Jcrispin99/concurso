@@ -2,6 +2,7 @@ import ar from '../../public/images/flags/ar.webp'
 import mx from '../../public/images/flags/mx.webp'
 import co from '../../public/images/flags/co.webp'
 import es from '../../public/images/flags/es.webp'
+import pe from '../../public/images/flags/pe.webp'
 
 export type Country = {
   id: string
@@ -34,5 +35,11 @@ export const countries: Country[] = [
     name: 'España',
     image: es,
     continent: 'Europe',
+  },
+  {
+    id: 'pe',
+    name: 'Perú',
+    image: pe,
+    continent: 'South America',
   },
 ]
