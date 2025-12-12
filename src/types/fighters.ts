@@ -7,7 +7,7 @@ type fighterId =
   | 'miss_evolution_jeans'
 
 type fighterName =
-| 'Miss Zuari'
+  | 'Miss Zuari'
   | 'Miss Pioner'
   | 'Miss Soda'
   | 'Miss Evolution Jeans'
