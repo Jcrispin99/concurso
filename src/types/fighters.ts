@@ -1,7 +1,8 @@
 import type { Social } from '@/types/social'
 
 type fighterId =
-  | 'peereira'
+  | 'miss_pioner'
+  | 'miss_soda'
   | 'perxitaa'
   | 'abby'
   | 'roro'
@@ -17,7 +18,8 @@ type fighterId =
   | 'carlos'
 
 type fighterName =
-  | 'Peereira'
+  | 'Miss Pioner'
+  | 'Miss Soda'
   | 'Perxitaa'
   | 'Abby'
   | 'Roro'
@@ -34,12 +36,12 @@ type fighterName =
 
 interface Clips {
   text: string
-  url: string
 }
 
 export interface Fighters {
   id: fighterId
   name: fighterName
+  slug?: string
   fightName?: string
   city?: string
   realName: string

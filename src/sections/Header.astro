@@ -68,17 +68,16 @@ const isActive = (path: string) => pathname === path
 
       <div>
         <a
-          href="https://www.youtube.com/watch?v=YE2Tmktpp50"
+          id="user-menu-btn"
+          href="/login"
           class:list={[
             'w-fut group relative flex-col items-end py-1 leading-relaxed tracking-wider md:text-right',
             shouldShowLogo ? 'md:w-1/3' : 'md:flex-grow',
           ]}
-          rel="noopener noreferrer"
-          target="_blank"
-          title="Comprar entradas para La Velada V"
+          title="Acceder a mi cuenta"
         >
           <span id="buy-tickets" class="text-theme-seashell neon-text relative inline-block"
-            >VER LA VELADA V
+            >INICIAR SESIÓN
           </span>
           <div class="relative h-[2px] w-full overflow-hidden">
             <div
@@ -142,6 +141,7 @@ const isActive = (path: string) => pathname === path
 
 <script>
   import { $ } from '@/lib/dom-selector'
+  import { authService } from '@/services/auth'
 
   document.addEventListener('astro:page-load', () => {
     function toggleMenu(
@@ -159,8 +159,16 @@ const isActive = (path: string) => pathname === path
     const menuButton = $('#menuButton')
     const overlayMenu = $('#overlay-menu')
     const tickets = $('#buy-tickets')
+    const userMenuBtn = $('#user-menu-btn') as HTMLAnchorElement
 
     menuButton?.addEventListener('click', () => toggleMenu(menuButton, navContent, overlayMenu))
     overlayMenu?.addEventListener('click', () => toggleMenu(menuButton, navContent, overlayMenu))
+
+    // Auth State Check
+    const token = authService.getToken()
+    if (token && userMenuBtn && tickets) {
+      userMenuBtn.href = '/profile'
+      tickets.textContent = 'MI PERFIL'
+    }
   })
 </script>

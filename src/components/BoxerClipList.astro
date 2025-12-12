@@ -1,6 +1,5 @@
 ---
 import BoxerClipCard from './BoxerClipCard.astro'
-import Youtube from '@/assets/svg/youtube.svg'
 
 interface Clip {
   text: string
@@ -10,9 +9,10 @@ interface Clip {
 interface BoxerClipProps {
   clips?: Clip[]
   externalPlayer?: boolean
+  fighterSlug?: string
 }
 
-const { clips = [], externalPlayer } = Astro.props as BoxerClipProps
+const { clips = [], externalPlayer, fighterSlug } = Astro.props as BoxerClipProps
 const clips_sorted_by_text_size = clips.sort((a, b) => b.text.length - a.text.length)
 ---
 
@@ -24,15 +24,114 @@ const clips_sorted_by_text_size = clips.sort((a, b) => b.text.length - a.text.le
       <BoxerClipCard externalPlayer={externalPlayer} index={i} text={clip.text} url={clip.url} />
     ))
   }
-  <li class="mt-4 flex cursor-pointer justify-end p-0">
-    <label
-      for="clip-drawer-toggle"
-      style={{ animationDelay: `${400 * clips.length}ms` }}
-      class="animate-fade-in-up text-dark-magenta duration-600 relative mt-2 flex h-6 cursor-pointer items-center justify-end rounded-sm bg-white/20 px-2 py-0 text-sm hover:scale-105"
-    >
-      <Youtube class="mr-2 inline-flex w-4 text-red-600" />
-      <span class="text-xs">Ver clips del combate</span>
-    </label>
-  </li>
 </ul>
-<!-- End ListClips -->
+
+<div id="vote-wrapper" class="hidden">
+  <div class="flex flex-col items-center justify-center gap-4">
+    {
+      fighterSlug && (
+        <button
+          id="vote-btn"
+          data-slug={fighterSlug}
+          class="border-theme-accent text-theme-accent focus:ring-theme-accent/50 group relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 px-12 py-3 text-lg font-bold transition-all duration-300 hover:bg-black hover:text-white focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:border-gray-600 disabled:bg-gray-800 disabled:text-gray-400"
+        >
+          <span class="relative z-10">VOTAR</span>
+        </button>
+      )
+    }
+    <p id="vote-message" class="text-center text-sm font-medium"></p>
+  </div>
+</div>
+
+<script>
+  import { authService } from '@/services/auth'
+  import { voteService } from '@/services/vote'
+  import { FIGHTERS } from '@/consts/fighters'
+
+  document.addEventListener('astro:page-load', () => {
+    const voteBtn = document.getElementById('vote-btn')
+    const voteMessage = document.getElementById('vote-message')
+    const voteWrapper = document.getElementById('vote-wrapper')
+
+    if (voteBtn && voteWrapper) {
+      const currentSlug = voteBtn.getAttribute('data-slug')
+
+      const token = authService.getToken()
+
+      if (token) {
+        voteWrapper.classList.remove('hidden')
+
+        let votedFighter = null
+        for (const fighter of FIGHTERS) {
+          const voteKey = `voted_${fighter.slug}`
+          const isVoted = localStorage.getItem(voteKey)
+          if (fighter.slug && isVoted) {
+            votedFighter = fighter
+            break
+          }
+        }
+
+        if (votedFighter) {
+          voteBtn.setAttribute('disabled', 'true')
+          if (currentSlug && votedFighter.slug === currentSlug) {
+            voteBtn.textContent = 'VOTADO'
+            if (voteMessage) {
+              voteMessage.textContent = 'Ya has votado por este candidato.'
+              voteMessage.className = 'text-center text-sm font-medium text-gray-400'
+            }
+          } else {
+            voteBtn.innerText = 'VOTAR'
+            if (voteMessage) {
+              voteMessage.textContent = `Ya votaste por ${votedFighter.name}.`
+              voteMessage.className = 'text-center text-sm font-medium text-red-500'
+            }
+          }
+        }
+      } else {
+        voteWrapper.classList.add('hidden')
+      }
+
+      voteBtn.addEventListener('click', async () => {
+        const token = authService.getToken()
+        if (!token) {
+          window.location.href = '/login'
+          return
+        }
+
+        if (!currentSlug) return
+
+        try {
+          voteBtn.setAttribute('disabled', 'true')
+          voteBtn.innerText = 'Votando...'
+
+          await voteService.vote(currentSlug)
+
+          if (voteMessage) {
+            voteMessage.textContent = '¡Voto registrado exitosamente!'
+            voteMessage.className = 'text-center text-sm font-medium text-green-500'
+          }
+          voteBtn.innerText = 'VOTADO'
+          localStorage.setItem(`voted_${currentSlug}`, 'true')
+        } catch (error: any) {
+          console.error('Vote Error:', error)
+
+          if (error.status === 400 || error.message.includes('Ya votó')) {
+            voteBtn.setAttribute('disabled', 'true')
+            voteBtn.innerText = 'VOTAR'
+            if (voteMessage) {
+              voteMessage.textContent = 'Ya has realizado tu voto por un participante.'
+              voteMessage.className = 'text-center text-sm font-medium text-red-500'
+            }
+          } else {
+            voteBtn.removeAttribute('disabled')
+            voteBtn.innerHTML = '<span class="relative z-10">VOTAR</span>'
+            if (voteMessage) {
+              voteMessage.textContent = 'Error al registrar el voto. Inténtalo de nuevo.'
+              voteMessage.className = 'text-center text-sm font-medium text-red-500'
+            }
+          }
+        }
+      })
+    }
+  })
+</script>

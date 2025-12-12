@@ -11,8 +11,8 @@ interface Props {
 
 <a
   class={`boxer-card ${extraClass} inline-block transition-all w-24 sm:w-24 md:w-16 lg:w-20 xl:w-24 2xl:w-26 group relative rounded-lg duration-300 hover:scale-110 hover:shadow-lg hover:z-20 focus-visible:scale-110 focus-visible:shadow-lg focus-visible:z-20 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-tickle-me-pink`}
-  aria-label={`Ver perfil del boxeador ${name}`}
-  href={`/luchador/${id}`}
+  aria-label={`Ver perfil de la concursante ${name}`}
+  href={`/concursante/${id}`}
   data-id={id}
   data-versus={versus}
 >
@@ -20,7 +20,7 @@ interface Props {
     <img
       class="via-40 aspect-[900/1200] h-full w-full bg-gradient-to-t from-gray-50/40 via-gray-50/20 to-transparent object-cover transition-transform duration-500 group-hover:scale-110"
       src={`/images/fighters/cards/${id}.webp`}
-      alt={`Tarjeta del boxeador ${name}`}
+      alt={`Tarjeta de la concursante ${name}`}
     />
 
     <div

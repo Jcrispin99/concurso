@@ -1,8 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 
-import BoxerCard from '@/components/BoxerCard.astro'
-import BoxerClipDrawer from '@/components/BoxerClipDrawer.astro'
 import BoxerClipList from '@/components/BoxerClipList.astro'
 import BoxerGallery from '@/components/BoxerGallery.astro'
 import BoxerProfileCard from '@/components/BoxerProfileCard.astro'
@@ -14,14 +12,14 @@ import { fixedTitle } from '@/consts/pageTitles'
 import { COMBATS } from '@/consts/combats'
 import { getBoxerById } from '@/lib/boxers'
 
-const { id} = Astro.params
+const { id } = Astro.params
 if (!id) return Astro.redirect('/404')
 
 const fighter = getBoxerById(id)
 if (!fighter) return Astro.redirect('/404')
 
 const description = `Biografía, estadísticas y clips de ${fighter.name}, participante del concurso. ${fighter.bio.substring(0, 120)}${fighter.bio.length > 120 ? '...' : ''}`
-const canonical = `https://www.infolavelada.com/luchador/${id}`
+const canonical = `https://www.infolavelada.com/concursante/${id}`
 
 const birthDate = fighter.birthDate.toLocaleDateString('es-ES', {
   year: 'numeric',
@@ -44,18 +42,14 @@ export const getStaticPaths = () => {
     <aside
       class="group flex w-full flex-col items-center justify-center gap-y-32 text-balance px-8 pt-4 text-right lg:min-h-screen lg:max-w-xl lg:pt-24"
     >
-      <BoxerClipList clips={fighter.clips} externalPlayer={false} />
-
-      <div class="relative z-[101]">
-        <BoxerClipDrawer clips={fighter.clips} />
-      </div>
+      <BoxerClipList clips={fighter.clips} externalPlayer={false} fighterSlug={fighter.slug} />
     </aside>
 
-    <!-- Boxeador perfil -->
+    <!-- Concursante perfil -->
     <div
       class="relative z-10 flex w-full flex-col items-center justify-center pl-0 pr-0 lg:flex-row lg:items-start lg:pr-8"
     >
-      <!-- Imagenes del boxeador -->
+      <!-- Imagenes del concursante -->
       <div
         class="lg:min-w-sm relative mt-8 flex h-[60vh] w-full items-center justify-center px-6 pt-24 lg:mt-0 lg:h-[80vh] lg:w-1/2 lg:px-2 lg:pt-32"
       >
@@ -72,15 +66,15 @@ export const getStaticPaths = () => {
           transition:name={`text-${id}`}
         />
       </div>
-      <!-- Fin de las imagenes del boxeador -->
+      <!-- Fin de las imagenes del concursante -->
 
-      <!-- Tarjeta del boxeador -->
+      <!-- Tarjeta del concursante -->
       <div
         class="flex w-full max-w-xl flex-col items-center justify-center space-y-4 px-8 text-white lg:min-h-screen lg:w-1/2 lg:px-0"
       >
         <BoxerProfileCard fighter={fighter} birthDate={birthDate} />
       </div>
-      <!-- Fin de la tarjeta del boxeador -->
+      <!-- Fin de la tarjeta del concursante -->
     </div>
   </section>
 
@@ -108,8 +102,6 @@ export const getStaticPaths = () => {
       </section>
     )
   }
-
-
 
   <!-- Video de Entrenamientos -->
   <section>

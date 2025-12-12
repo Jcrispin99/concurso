@@ -1,0 +1,93 @@
+---
+import Layout from '@/layouts/Layout.astro'
+---
+
+<Layout title="Iniciar Sesión | La Velada del Año V">
+  <section class="flex min-h-screen w-full items-center justify-center px-4 pt-24">
+    <div
+      class="bg-theme-raisin-black/80 w-full max-w-md rounded-xl border border-white/20 p-8 backdrop-blur-md"
+    >
+      <h1 class="mb-8 text-center text-3xl font-bold uppercase tracking-wider text-white">
+        Iniciar Sesión
+      </h1>
+
+      <form id="login-form" class="space-y-6">
+        <div>
+          <label for="email" class="mb-2 block text-sm font-medium text-gray-300"
+            >Correo Electrónico</label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="focus:border-theme-tickle-me-pink focus:ring-theme-tickle-me-pink w-full rounded-lg border border-gray-600 bg-black/50 p-2.5 text-white placeholder-gray-400"
+            placeholder="nombre@ejemplo.com"
+          />
+        </div>
+
+        <div>
+          <label for="password" class="mb-2 block text-sm font-medium text-gray-300"
+            >Contraseña</label
+          >
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            class="focus:border-theme-tickle-me-pink focus:ring-theme-tickle-me-pink w-full rounded-lg border border-gray-600 bg-black/50 p-2.5 text-white placeholder-gray-400"
+            placeholder="••••••••"
+          />
+        </div>
+
+        <div id="error-message" class="hidden text-center text-sm font-medium text-red-500"></div>
+
+        <button
+          type="submit"
+          class="bg-theme-tickle-me-pink hover:bg-theme-tickle-me-pink/80 w-full rounded-lg px-5 py-2.5 text-center text-sm font-bold text-white transition-all focus:outline-none focus:ring-4 focus:ring-purple-300"
+        >
+          ENTRAR
+        </button>
+
+        <div class="text-center text-sm font-medium text-gray-400">
+          ¿No tienes cuenta? <a href="/register" class="text-theme-tickle-me-pink hover:underline"
+            >Regístrate</a
+          >
+        </div>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { authService } from '@/services/auth'
+
+  const loginForm = document.getElementById('login-form') as HTMLFormElement
+  const errorMessage = document.getElementById('error-message')
+
+  if (authService.getToken()) {
+    window.location.href = '/'
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const formData = new FormData(loginForm)
+      const email = formData.get('email') as string
+      const password = formData.get('password') as string
+
+      errorMessage?.classList.add('hidden')
+      errorMessage!.textContent = ''
+
+      try {
+        const response = await authService.login(email, password)
+        authService.setToken(response.token)
+        window.location.href = '/'
+      } catch (error) {
+        console.error(error)
+        errorMessage?.classList.remove('hidden')
+        errorMessage!.textContent = 'Credenciales inválidas. Por favor intenta de nuevo.'
+      }
+    })
+  }
+</script>

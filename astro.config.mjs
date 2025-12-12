@@ -12,6 +12,20 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      proxy: {
+        '/api': {
+          target: 'https://b-concurso.kdoshstore.com',
+          changeOrigin: true,
+          rewrite: (path) => {
+            if (path.includes('/vote') || path.includes('/results')) {
+              return path
+            }
+            return path.replace(/^\/api/, '')
+          },
+        },
+      },
+    },
   },
 
   build: {
